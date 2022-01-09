@@ -1,15 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;500;600;800&display=swap');
 
-
 body {
-    font-family: Montserrat;
+  font-family: Montserrat;
 }
 
 .App {
   text-align: center;
 }
 .App code {
-  background: #FFF3;
+  background: #fff3;
   padding: 4px 8px;
   border-radius: 4px;
 }
@@ -50,4 +49,9 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+.button-container {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
 }

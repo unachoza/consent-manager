@@ -1,5 +1,6 @@
 :root {
-  --transcend-blue: #3333FF;;
+  --transcend-blue: #3333FF;
+  --black: black;
 }
 
 
@@ -21,10 +22,11 @@ a {
   height: 50px;
   color: black;
   background-color: var(--transcend-blue);
-  border: solid var(--transcend-blue);
+  border: solid var(--black);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  margin: 20px
 }
 .button-container{
   display: flex;
