@@ -1,0 +1,10 @@
+.ConsentManager {
+  width: 50vw;
+  height: 50vh;
+  background: white;
+  overflow: scroll;
+  margin: 10% 25% 0 25%;
+  position: absolute;
+  z-index: 1000000;
+  padding: 2%;
+}
