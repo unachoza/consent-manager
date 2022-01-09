@@ -1,7 +1,9 @@
+//@ts-nocheck
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { config } from './config';
 import { getAirgap } from './init';
+import Button from './Button/Button'
 import './ui.css';
 
 let initialized = false;
@@ -44,6 +46,10 @@ const setupConsentManagerUI = async (): Promise<void> => {
           <pre>
             {JSON.stringify(config, null, 2)}
           </pre>
+          <div>
+          <Button text={"Accept All"} onClick={(e) => console.log('accept clicked')} />
+          <Button text={ "Deny All"} onClick={(e) => console.log('deny clicked')}/>
+          </div>
         </section>
       </>
     );
