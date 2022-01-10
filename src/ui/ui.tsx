@@ -6,6 +6,7 @@ import { getAirgap } from './init';
 import Button from './Button/Button';
 import ToggleSwitch from './ToggleSwitch/ToggleSwitch';
 import './ui.css';
+import Popup from './Popup/Popup'
 
 let initialized = false;
 // UI root node in DOM
@@ -15,14 +16,20 @@ const setupConsentManagerUI = async (): Promise<void> => {
   console.log('Initializing Consent Manager UI...');
 
   const airgap = await getAirgap();
-  console.log('Purpose types config: ariannas', airgap.getPurposeTypes());
+  const massiveObj = airgap.getPurposeTypes()
+  console.log('Purpose types config: ariannas', massiveObj.Parkinsons_Cursor_Tracking.name);
   console.log('Consent Manager UI config:n ariannas', config.name);
-  console.log('Consent Manager UI config:n ariannas', JSON.toString(config));
-
+  // console.log('Consent Manager UI config:n ariannas', JSON.toString(config));
+  const consentObj = airgap.getConsent()
+  console.log({ consentObj })
+  
+  const INITIAL_STATE = consentObj
   // TODO: Setup your consent manager UI DOM here
   const App: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [consent, setConsent] = useState(INITIAL_STATE);
 
+    const [advertising, setAdvertising] = useState(false)
     // this.#containerRef = createRef();
 
     // const handleOutsideClick = (e: MouseEvent) => {
@@ -33,18 +40,25 @@ const setupConsentManagerUI = async (): Promise<void> => {
     //     setisOpen(false)
     //   }
     // };
-
-    const reasonArray = [];
-    const obj = airgap.getPurposeTypes();
-    for (const reason in obj) {
-      console.log(reason);
-      reasonArray.push(reason);
+    const onSwitch = (targetState, newValue) => {
+      // set[targetState](newValue)
+      this.setState({ checked: newValue });
     }
-    console.log({ reasonArray });
-    reasonArray.map((r) => {
-      console.log({ r });
-    });
-    console.log(obj, 'where is this????');
+    const onChange = () => {
+      setAdvertising(prevAdvertising => !prevAdvertising)
+    }
+    
+    const reasonArray = [];
+    // const obj = airgap.getPurposeTypes();
+    // for (const reason in obj) {
+    //   console.log(reason);
+    //   reasonArray.push(reason);
+    // }
+    // console.log({ reasonArray });
+    // reasonArray.map((r) => {
+    //   console.log({ r });
+    // });
+    // console.log(obj, 'where is this????');
     // {JSON.parse(airgap.getPurposeTypes())}
     return (
       <>
@@ -60,9 +74,12 @@ const setupConsentManagerUI = async (): Promise<void> => {
           <h3>
             Tracking purpose types are all the fuck over the place
             <p>
-              {reasonArray.map((r) => {
-                <p>{r}</p>;
+              {Object.keys(massiveObj).map(key => {
+            
+            return    <p>{key}</p>
               })}
+             <strong>{massiveObj.Parkinsons_Cursor_Tracking.name}</strong> 
+              <p>{massiveObj.Parkinsons_Cursor_Tracking.description}</p>
             </p>
           </h3>
           <pre>{JSON.stringify(airgap.getPurposeTypes(), null, 2)}</pre>
@@ -71,7 +88,7 @@ const setupConsentManagerUI = async (): Promise<void> => {
           <div className="switch-container">
             <ToggleSwitch label={'Functional'} />
             <ToggleSwitch label={'Analytics'} />
-            <ToggleSwitch label={'Advertising'} />
+            <ToggleSwitch label={'Advertising'} value={advertising} key="ad" onChange={onChange}/>
             <ToggleSwitch label={'Parkinson Cursor Tracking'} />
           </div>
           <div className="button-container">

@@ -43,13 +43,13 @@
   box-sizing: border-box;
 }
 .inner:before {
-  content: "YES";
+  content:  attr(data-yes);;
   padding-left: 10px;
   background-color: var(--transcend-blue);
   color: #fff;
 }
 .inner:after {
-  content: "NO";
+  content:  attr(data-no);;
   padding-right: 10px;
   background-color: #bbb;
   color: #fff;
