@@ -5,8 +5,9 @@ import { config } from './config';
 import { getAirgap } from './init';
 import Button from './Button/Button';
 import ToggleSwitch from './ToggleSwitch/ToggleSwitch';
+import Tooltip from './Tooltip/Tooltip';
 import './ui.css';
-import Popup from './Popup/Popup'
+import Popup from './Popup/Popup';
 
 let initialized = false;
 // UI root node in DOM
@@ -16,20 +17,46 @@ const setupConsentManagerUI = async (): Promise<void> => {
   console.log('Initializing Consent Manager UI...');
 
   const airgap = await getAirgap();
-  const massiveObj = airgap.getPurposeTypes()
-  console.log('Purpose types config: ariannas', massiveObj.Parkinsons_Cursor_Tracking.name);
+  const massiveObj = airgap.getPurposeTypes();
+  console.log(
+    'Purpose types config: ariannas',
+    massiveObj.Parkinsons_Cursor_Tracking.name,
+  );
   console.log('Consent Manager UI config:n ariannas', config.name);
   // console.log('Consent Manager UI config:n ariannas', JSON.toString(config));
-  const consentObj = airgap.getConsent()
-  console.log({ consentObj })
-  
-  const INITIAL_STATE = consentObj
+  const consentObj = airgap.getConsent();
+  console.log({ consentObj });
+  const obj = airgap.getPurposeTypes();
+  console.log('this here' , obj)
+
+  const shapeData = (input: any, normalizedDataShape: any) => {
+    console.log(input.length, input)
+  //   let shapedData = [];
+  //   for (let el of input) {
+  //    shapedData.push(normalizedDataShape(el));
+  //  }
+  //  return shapedData;
+   };
+  const normalizeData = (data) => ({
+    configurable: massiveObj[key].configurable,
+    defaultConsent: massiveObj[key].defaultConsent,
+    explicitConsent: false,
+    description: massiveObj[key].description,
+    essential: massiveObj[key].essential,
+    name: massiveObj[key].name,
+    showInConsentManager: massiveObj[key].showInConsentManager,
+  });
+  const betterData = shapeData(obj, normalizeData)
+  console.log({betterData});
+
+  const INITIAL_STATE = consentObj;
   // TODO: Setup your consent manager UI DOM here
   const App: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const toggling = () => setIsOpen(!isOpen);
     const [consent, setConsent] = useState(INITIAL_STATE);
 
-    const [advertising, setAdvertising] = useState(false)
+    const [advertising, setAdvertising] = useState(false);
     // this.#containerRef = createRef();
 
     // const handleOutsideClick = (e: MouseEvent) => {
@@ -43,13 +70,12 @@ const setupConsentManagerUI = async (): Promise<void> => {
     const onSwitch = (targetState, newValue) => {
       // set[targetState](newValue)
       this.setState({ checked: newValue });
-    }
+    };
     const onChange = () => {
-      setAdvertising(prevAdvertising => !prevAdvertising)
-    }
-    
+      setAdvertising((prevAdvertising) => !prevAdvertising);
+    };
+
     const reasonArray = [];
-    // const obj = airgap.getPurposeTypes();
     // for (const reason in obj) {
     //   console.log(reason);
     //   reasonArray.push(reason);
@@ -74,11 +100,26 @@ const setupConsentManagerUI = async (): Promise<void> => {
           <h3>
             Tracking purpose types are all the fuck over the place
             <p>
-              {Object.keys(massiveObj).map(key => {
-            
-            return    <p>{key}</p>
+              {Object.keys(massiveObj).map((key) => {
+                console.log(massiveObj[key]);
+                return (
+                  <div>
+                  <ToggleSwitch label={massiveObj[key].name} />
+                  <span>
+                    {' '}
+                    <img
+                      src={`https://res.cloudinary.com/dh41vh9dx/image/upload/v1619578173/3946401821543238897.svg`}
+                      className="info-icon"
+                      alt="information icon"
+                      onClick={toggling}
+                    />
+                    </span>
+                    
+                    {isOpen && <Tooltip toggling={toggling} text={massiveObj[key].description} />}
+                    </div>
+                );
               })}
-             <strong>{massiveObj.Parkinsons_Cursor_Tracking.name}</strong> 
+              <strong>{massiveObj.Parkinsons_Cursor_Tracking.name}</strong>
               <p>{massiveObj.Parkinsons_Cursor_Tracking.description}</p>
             </p>
           </h3>
@@ -86,13 +127,28 @@ const setupConsentManagerUI = async (): Promise<void> => {
           <h3>Consent Manager UI config</h3>
           <pre>{JSON.stringify(config, null, 2)}</pre>
           <div className="switch-container">
-            <ToggleSwitch label={'Functional'} />
+            <div>
+              <ToggleSwitch label={'Functional'} />
+              <span>
+                {' '}
+                <img
+                  src={`https://res.cloudinary.com/dh41vh9dx/image/upload/v1619578173/3946401821543238897.svg`}
+                  className="info-icon"
+                  alt="information icon"
+                  onClick={toggling}
+                />
+              </span>
+
+              {isOpen && (
+                <Tooltip toggling={toggling} text="informative stuff" />
+              )}
+            </div>
             <ToggleSwitch label={'Analytics'} />
-            <ToggleSwitch label={'Advertising'} value={advertising} key="ad" onChange={onChange}/>
+            {/* <ToggleSwitch label={'Advertising'} value={advertising} key="ad" onChange={onChange}/> */}
             <ToggleSwitch label={'Parkinson Cursor Tracking'} />
           </div>
           <div className="button-container">
-          <Button
+            <Button
               text={'Save Preferences'}
               onClick={(e) => console.log('Save clicked')}
             />

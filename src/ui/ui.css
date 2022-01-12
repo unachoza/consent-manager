@@ -8,3 +8,8 @@
   z-index: 1000000;
   padding: 2%;
 }
+
+.info-icon {
+  height: 20px;
+  margin: 0px 0px -3px 0px;
+}
