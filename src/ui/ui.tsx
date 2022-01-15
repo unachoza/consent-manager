@@ -22,7 +22,7 @@ const setupConsentManagerUI = async (): Promise<void> => {
     'Purpose types config: ariannas',
     massiveObj.Parkinsons_Cursor_Tracking.name,
   );
-  console.log('Consent Manager UI config:n ariannas', config.name);
+  console.log('Consent Manager UI config:n ariannasssssssss', config);
   // console.log('Consent Manager UI config:n ariannas', JSON.toString(config));
   const consentObj = airgap.getConsent();
   console.log({ consentObj });
@@ -30,7 +30,7 @@ const setupConsentManagerUI = async (): Promise<void> => {
   console.log('this here' , obj)
 
   const shapeData = (input: any, normalizedDataShape: any) => {
-    console.log(input.length, input)
+    console.log(input.length, input, "shapping what ?")
   //   let shapedData = [];
   //   for (let el of input) {
   //    shapedData.push(normalizedDataShape(el));
@@ -75,30 +75,20 @@ const setupConsentManagerUI = async (): Promise<void> => {
       setAdvertising((prevAdvertising) => !prevAdvertising);
     };
 
-    const reasonArray = [];
-    // for (const reason in obj) {
-    //   console.log(reason);
-    //   reasonArray.push(reason);
-    // }
-    // console.log({ reasonArray });
-    // reasonArray.map((r) => {
-    //   console.log({ r });
-    // });
-    // console.log(obj, 'where is this????');
-    // {JSON.parse(airgap.getPurposeTypes())}
+
     return (
       <>
         <section id="container">
+          <a>{config.learnMoreLink}</a>
           <header>
-            <h2>Consent Manager</h2>
+            <h2>{ config.consentManagerTitle}</h2>
           </header>
           <p>
-            Edit <code>src/ui/ui.tsx</code> and save to reload.
+            {config.body}
           </p>
-          <h3>Current tracking purpose consent</h3>
-          <pre>{JSON.stringify(airgap.getConsent(), null, 2)}</pre>
+          {/* <h3>Current tracking purpose consent</h3> */}
           <h3>
-            Tracking purpose types are all the fuck over the place
+        {config.prefsHeader}
             <p>
               {Object.keys(massiveObj).map((key) => {
                 console.log(massiveObj[key]);
@@ -123,9 +113,7 @@ const setupConsentManagerUI = async (): Promise<void> => {
               <p>{massiveObj.Parkinsons_Cursor_Tracking.description}</p>
             </p>
           </h3>
-          <pre>{JSON.stringify(airgap.getPurposeTypes(), null, 2)}</pre>
           <h3>Consent Manager UI config</h3>
-          <pre>{JSON.stringify(config, null, 2)}</pre>
           <div className="switch-container">
             <div>
               <ToggleSwitch label={'Functional'} />
